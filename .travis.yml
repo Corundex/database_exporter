@@ -2,7 +2,7 @@ language: go
 
 env:
   global:
-    - PKG_CONFIG_PATH=$HOME/gopath/src/github.com/Corundex/database_exporter/include
+    - PKG_CONFIG_PATH=$HOME/gopath/src/github.com/areinard/database_exporter/include
 
 script:
   - export ARCH=$(uname -i)

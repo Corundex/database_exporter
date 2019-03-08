@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Corundex/database_exporter/exporter"
+	"github.com/areinard/database_exporter/exporter"
 	log "github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/expfmt"
@@ -74,8 +74,10 @@ func ExporterHandlerFor(exporter exporter.Exporter) http.Handler {
 func contextFor(req *http.Request, exporter exporter.Exporter) (context.Context, context.CancelFunc) {
 	timeout := time.Duration(0)
 	configTimeout := time.Duration(exporter.Config().Globals.ScrapeTimeout)
+	//configTimeout := time.Duration(90)
 	// If a timeout is provided in the Prometheus header, use it.
-	if v := req.Header.Get("X-Prometheus-Scrape-Timeout-Seconds"); v != "" {
+	v := req.Header.Get("X-Prometheus-Scrape-Timeout-Seconds")
+	if v != "" {
 		timeoutSeconds, err := strconv.ParseFloat(v, 64)
 		if err != nil {
 			log.Errorf("Failed to parse timeout (`%s`) from Prometheus header: %s", v, err)

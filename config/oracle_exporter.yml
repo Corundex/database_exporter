@@ -2,8 +2,10 @@
 global:
   # Subtracted from Prometheus' scrape_timeout to give us some headroom and prevent Prometheus from timing out first.
   scrape_timeout_offset: 500ms
+  scrape_timeout: 180s
+
   # Minimum interval between collector runs: by default (0s) collectors are executed on every scrape.
-  min_interval: 0s
+  min_interval: 90s
   # Maximum number of open connections to any one target. Metric queries will run concurrently on multiple connections,
   # as will concurrent scrapes.
   max_connections: 3
@@ -18,7 +20,7 @@ target:
   data_source_name: oracle://user/password@host:1521/sid
 
   # Collectors (referenced by name) to execute on the target.
-  collectors: [oracle_metrics]
+  collectors: [oracledb_metrics]
 
 # Collector files specifies a list of globs. One collector definition is read from each matching file.
 collector_files: 

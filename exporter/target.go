@@ -5,21 +5,19 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
-	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	go_n1ql "github.com/couchbase/go_n1ql"
 	"github.com/golang/protobuf/proto"
-	"github.com/prometheus/client_golang/prometheus"
+	prometheus "github.com/prometheus/client_golang/prometheus"
 	dto "github.com/prometheus/client_model/go"
 )
 
 const (
 	// Capacity for the channel to collect metrics.
-	capMetricChan = 1000
-
+	capMetricChan      = 1000
 	upMetricName       = "up"
 	upMetricHelp       = "1 if the target is reachable, or 0 if the scrape failed"
 	scrapeDurationName = "scrape_duration_seconds"
@@ -64,7 +62,7 @@ func NewTarget(
 			Value: proto.String(v),
 		})
 	}
-	sort.Sort(prometheus.LabelPairSorter(constLabelPairs))
+	//sort.Sort(prometheus.LabelPairSorter(constLabelPairs))
 
 	collectors := make([]Collector, 0, len(ccs))
 	for _, cc := range ccs {

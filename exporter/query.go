@@ -133,6 +133,7 @@ func (q *Query) scanDest(rows *sql.Rows) ([]interface{}, WithContext) {
 	// Create the slice to scan the row into, with strings for keys and float64s for values.
 	dest := make([]interface{}, 0, len(columns))
 	have := make(map[string]bool, len(q.columnTypes))
+
 	for i, column := range columns {
 		switch q.columnTypes[column] {
 		case columnTypeKey:
@@ -145,7 +146,8 @@ func (q *Query) scanDest(rows *sql.Rows) ([]interface{}, WithContext) {
 			if column == "" {
 				log.Warningf("[%s] Unnamed column %d returned by query", q.logContext, i)
 			} else {
-				log.Warningf("[%s] Extra column %q returned by query", q.logContext, column)
+				// disable until parameterized. This is potentially generating spam logging.
+				// log.Warningf("[%s] Extra column %q returned by query", q.logContext, column)
 			}
 			dest = append(dest, new(interface{}))
 		}

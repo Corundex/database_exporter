@@ -9,7 +9,7 @@ import (
 
 	_ "net/http/pprof"
 
-	"github.com/Corundex/database_exporter/exporter"
+	"github.com/areinard/database_exporter/exporter"
 	log "github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -31,6 +31,7 @@ func main() {
 		listenAddress = flag.String("web.listen-address", ":9285", "Address to listen on for web interface and telemetry.")
 		metricsPath   = flag.String("web.metrics-path", "/metrics", "Path under which to expose metrics.")
 		configFile    = flag.String("config.file", "database_exporter.yml", "Database Exporter configuration file name.")
+		dsnOverride   = flag.String("config.dsn", "", "DSN configuration override")
 	)
 
 	// Override --alsologtostderr default value.
@@ -52,7 +53,7 @@ func main() {
 
 	log.Infof("Starting Database Exporter %s %s", version.Info(), version.BuildContext())
 
-	exporter, err := exporter.NewExporter(*configFile)
+	exporter, err := exporter.NewExporter(*configFile, *dsnOverride)
 	if err != nil {
 		log.Fatalf("Error creating exporter: %s", err)
 	}
@@ -62,6 +63,7 @@ func main() {
 	http.HandleFunc("/", HomeHandlerFunc(*metricsPath))
 	http.HandleFunc("/config", ConfigHandlerFunc(*metricsPath, exporter))
 	http.Handle(*metricsPath, ExporterHandlerFor(exporter))
+
 	// Expose exporter metrics separately, for debugging purposes.
 	http.Handle("/database_exporter_metrics", promhttp.Handler())
 

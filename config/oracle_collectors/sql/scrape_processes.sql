@@ -1,0 +1,1 @@
+SELECT COUNT(*) "count" FROM v$process

@@ -10,7 +10,7 @@ import (
 	log "github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // Load attempts to parse the given config file and return a Config object.
@@ -351,6 +351,17 @@ func (c *CollectorConfig) UnmarshalYAML(unmarshal func(interface{}) error) error
 			}
 			metric.query = query
 			query.metrics = append(query.metrics, metric)
+		} else if metric.QueryFile != "" {
+			var queryFilePath = strings.Replace(metric.QueryFile, "\n", "", -1)
+			queryBuffer, err := ioutil.ReadFile(queryFilePath)
+			if err != nil {
+				return fmt.Errorf("unable to load specified query_file %q in metric %q of collector %q", metric.QueryRef, metric.Name, c.Name)
+			}
+			queryString := string(queryBuffer[:])
+			metric.query = &QueryConfig{
+				Name:  metric.Name,
+				Query: queryString,
+			}
 		} else {
 			// For literal queries generate a QueryConfig with a name based off collector and metric name.
 			metric.query = &QueryConfig{
@@ -366,14 +377,16 @@ func (c *CollectorConfig) UnmarshalYAML(unmarshal func(interface{}) error) error
 // MetricConfig defines a Prometheus metric, the SQL query to populate it and the mapping of columns to metric
 // keys/values.
 type MetricConfig struct {
-	Name         string   `yaml:"metric_name"`           // the Prometheus metric name
-	TypeString   string   `yaml:"type"`                  // the Prometheus metric type
-	Help         string   `yaml:"help"`                  // the Prometheus metric help text
-	KeyLabels    []string `yaml:"key_labels,omitempty"`  // expose these columns as labels
-	ValueLabel   string   `yaml:"value_label,omitempty"` // with multiple value columns, map their names under this label
-	Values       []string `yaml:"values"`                // expose each of these columns as a value, keyed by column name
-	QueryLiteral string   `yaml:"query,omitempty"`       // a literal query
-	QueryRef     string   `yaml:"query_ref,omitempty"`   // references a query in the query map
+	Name         string         `yaml:"metric_name"`             // the Prometheus metric name
+	TypeString   string         `yaml:"type"`                    // the Prometheus metric type
+	Help         string         `yaml:"help"`                    // the Prometheus metric help text
+	KeyLabels    []string       `yaml:"key_labels,omitempty"`    // expose these columns as labels
+	StaticLabels []StaticLabels `yaml:"static_labels,omitempty"` // expose these columns as static labels
+	ValueLabel   string         `yaml:"value_label,omitempty"`   // with multiple value columns, map their names under this label
+	Values       []string       `yaml:"values"`                  // expose each of these columns as a value, keyed by column name
+	QueryLiteral string         `yaml:"query,omitempty"`         // a literal query
+	QueryRef     string         `yaml:"query_ref,omitempty"`     // references a query in the query map
+	QueryFile    string         `yaml:"query_file,omitempty"`    // references an external SQL file.
 
 	valueType prometheus.ValueType // TypeString converted to prometheus.ValueType
 	query     *QueryConfig         // QueryConfig resolved from QueryRef or generated from Query
@@ -409,8 +422,19 @@ func (m *MetricConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	if m.Help == "" {
 		return fmt.Errorf("missing help for metric %q", m.Name)
 	}
-	if (m.QueryLiteral == "") == (m.QueryRef == "") {
-		return fmt.Errorf("exactly one of query and query_ref must be specified for metric %q", m.Name)
+	var qCount int
+	if m.QueryLiteral != "" {
+		qCount++
+	}
+	if m.QueryRef != "" {
+		qCount++
+	}
+	if m.QueryFile != "" {
+		qCount++
+	}
+
+	if qCount != 1 {
+		return fmt.Errorf("exactly one of query, query_ref or query_file must be specified for metric %q", m.Name)
 	}
 
 	switch strings.ToLower(m.TypeString) {

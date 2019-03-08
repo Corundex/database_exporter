@@ -1,5 +1,7 @@
 /.project
 /.settings
 /database_exporter
+/debug
+.DS_Store
+config/.DS_Store
 .vscode
-

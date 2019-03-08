@@ -2,15 +2,15 @@
 #
 #
 
-collector_name: oracle_metrics
+collector_name: oracledb_metrics
 
 # Similar to global.min_interval, but applies to the queries defined by this collector only.
 #min_interval: 0s
 
 metrics:
-  - metric_name: oracle_metric
+  - metric_name: oracledb_metric
     type: gauge
-    help: 'Oracle v$metric'
+    help: 'Oracle DB v$metric'
     values:
       - value
     key_labels:
@@ -25,20 +25,210 @@ metrics:
       sum(value) "value"
       from v$metric 
       group by metric_name, metric_unit
-      
-  - metric_name: oracle_tablespace_size
-    type: gauge
-    help: 'Size of oracle db tablespaces.'
-    values:
+
+  - metric_name: oracledb_activity_execute_count
+    type: counter
+    help: 'counter metric from v$sysstat view in Oracle for execute count.'
+    values: 
       - value
     key_labels:
-      - tablespace_name
+      - name
     query: |
-      select 
-        tablespace_name "tablespace_name", 
-        sum(bytes) "value" 
-      from 
-        dba_data_files 
-      group by 
-        tablespace_name
+      SELECT name "name", value "value" FROM v$sysstat 
+      WHERE name = 'execute count'
 
+  - metric_name: oracledb_activity_parse_count_total
+    type: counter
+    help: 'counter metric from v$sysstat view in Oracle for parse count.'
+    values: 
+      - VALUE
+    key_labels:
+      - NAME
+    query: |
+      SELECT name, value FROM v$sysstat 
+      WHERE name = 'parse count (total)'
+
+  - metric_name: oracledb_activity_user_commits
+    type: counter
+    help: 'counter metric from v$sysstat view in Oracle for user commits.'
+    values: 
+      - VALUE
+    key_labels:
+      - NAME
+    query: |
+      SELECT name, value FROM v$sysstat 
+      WHERE name = 'user commits'
+
+  - metric_name: oracledb_activity_user_rollbacks
+    type: counter
+    help: 'counter metric from v$sysstat view in Oracle for user rollbacks.'
+    values: 
+      - VALUE
+    key_labels:
+      - NAME
+    query: |
+      SELECT name, value FROM v$sysstat 
+      WHERE name = 'user rollbacks'
+
+  - metric_name: oracledb_sessions_activity
+    type: gauge
+    help: 'Gauge metric with count of sessions by status and type.'
+    values: 
+      - COUNT
+    key_labels:
+      - status 
+      - type
+    query: |
+      SELECT status "status", type "type", COUNT(*) "COUNT"
+      FROM v$session GROUP BY status, type
+
+  - metric_name: oracledb_wait_time_application
+    type: gauge
+    help: 'Gauge metric for Oracle application wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Application'
+
+  - metric_name: oracledb_wait_time_commit
+    type: gauge
+    help: 'Gauge metric for Oracle commit wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Commit'
+
+  - metric_name: oracledb_wait_time_concurrency
+    type: gauge
+    help: 'Gauge metric for Oracle concurrency wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Concurrency'
+
+  - metric_name: oracledb_wait_time_configuration
+    type: gauge
+    help: 'Gauge metric for Oracle configuration wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Configuration'
+
+  - metric_name: oracledb_wait_time_network
+    type: gauge
+    help: 'Gauge metric for Oracle network wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Network'
+
+  - metric_name: oracledb_wait_time_other
+    type: gauge
+    help: 'Gauge metric for Oracle other wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Other'
+
+  - metric_name: oracledb_wait_time_scheduler
+    type: gauge
+    help: 'Gauge metric for Oracle Scheduler wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'Scheduler'
+
+  - metric_name: oracledb_wait_time_system_io
+    type: gauge
+    help: 'Gauge metric for Oracle System I/O wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'System I/O'
+
+  - metric_name: oracledb_wait_time_user_io
+    type: gauge
+    help: 'Gauge metric for Oracle User I/O wait time.'
+    values: 
+      - AAS
+    query: |
+      SELECT round(m.time_waited/m.INTSIZE_CSEC,3) AAS 
+      FROM v$waitclassmetric  m, v$system_wait_class n 
+      WHERE m.wait_class_id=n.wait_class_id 
+      AND n.wait_class = 'User I/O'
+
+  - metric_name: oracledb_tablespace_bytes
+    type: gauge
+    help: 'Gauge metric of tablespaces bytes in Oracle.'
+    values: 
+      - bytes
+    key_labels:
+      - name
+    query_file: |
+      ./config/oracle_collectors/sql/scrape_tablespace.sql
+
+  - metric_name: oracledb_tablespace_max_bytes
+    type: gauge
+    help: 'Gauge metric of tablespaces max bytes in Oracle.'
+    values: 
+      - max_bytes
+    key_labels:
+      - name
+    query_file: |
+      ./config/oracle_collectors/sql/scrape_tablespace.sql
+
+  - metric_name: oracledb_tablespace_bytes_free
+    type: gauge
+    help: 'Gauge metric of tablespaces free bytes in Oracle.'
+    values: 
+      - free_bytes
+    key_labels:
+      - name
+    query_file: |
+      ./config/oracle_collectors/sql/scrape_tablespace.sql
+
+  - metric_name: oracledb_process_count
+    type: gauge
+    help: 'Gauge metric with count of processes.'
+    values: 
+      - counter
+    query: |
+      SELECT COUNT(*) "counter" FROM v$process
+
+  - metric_name: oracledb_up
+    type: gauge
+    help: 'Oracle Up Gauge.'
+    values: 
+      - up
+    key_labels:
+      - host_name
+    query: |
+      SELECT host_name "host_name",
+      CASE database_status 
+      WHEN 'ACTIVE' THEN 1
+        ELSE 0 END "up"
+      FROM v$instance

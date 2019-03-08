@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	log "github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	dto "github.com/prometheus/client_model/go"
@@ -28,11 +29,17 @@ type exporter struct {
 }
 
 // NewExporter returns a new Exporter with the provided config.
-func NewExporter(configFile string) (Exporter, error) {
+func NewExporter(configFile string, dsnOverride string) (Exporter, error) {
 	c, err := Load(configFile)
 	if err != nil {
 		return nil, err
 	}
+
+	if dsnOverride != "" {
+		c.Target.DSN = Secret(string(dsnOverride))
+	}
+
+	log.Infof("Logging value of " + string(c.Target.DSN))
 
 	var targets []Target
 	if c.Target != nil {

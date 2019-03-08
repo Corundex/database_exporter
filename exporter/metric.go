@@ -2,10 +2,9 @@ package exporter
 
 import (
 	"fmt"
-	"sort"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/prometheus/client_golang/prometheus"
+	prometheus "github.com/prometheus/client_golang/prometheus"
 	dto "github.com/prometheus/client_model/go"
 )
 
@@ -31,6 +30,12 @@ type MetricFamily struct {
 	logContext  string
 }
 
+// StaticLabels define Prometheus metric with constant value.
+type StaticLabels struct {
+	Name  string `yaml:"name"`
+	Value string `yaml:"value"`
+}
+
 // NewMetricFamily creates a new MetricFamily with the given metric config and const labels (e.g. job and instance).
 func NewMetricFamily(logContext string, mc *MetricConfig, constLabels []*dto.LabelPair) (*MetricFamily, WithContext) {
 	logContext = fmt.Sprintf("%s, metric=%q", logContext, mc.Name)
@@ -46,6 +51,13 @@ func NewMetricFamily(logContext string, mc *MetricConfig, constLabels []*dto.Lab
 	labels = append(labels, mc.KeyLabels...)
 	if mc.ValueLabel != "" {
 		labels = append(labels, mc.ValueLabel)
+	}
+
+	for _, label := range mc.StaticLabels {
+		constLabels = append(constLabels, &dto.LabelPair{
+			Name:  proto.String(label.Name),
+			Value: proto.String(label.Value),
+		})
 	}
 
 	return &MetricFamily{
@@ -229,7 +241,7 @@ func makeLabelPairs(desc MetricDesc, labelValues []string) []*dto.LabelPair {
 		})
 	}
 	labelPairs = append(labelPairs, constLabels...)
-	sort.Sort(prometheus.LabelPairSorter(labelPairs))
+	//sort.Sort(prometheus.LabelPairSorter(labelPairs))
 	return labelPairs
 }
 
