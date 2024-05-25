@@ -1,9 +1,9 @@
 # Prometheus Database Exporter
 
-[![Build Status](https://travis-ci.org/Corundex/database_exporter.svg?branch=master)](https://travis-ci.org/Corundex/database_exporter)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Corundex/database_exporter)](https://goreportcard.com/report/github.com/Corundex/database_exporter)
-[![GoDoc](https://godoc.org/github.com/Corundex/database_exporter?status.svg)](https://godoc.org/github.com/Corundex/database_exporter)
-[![Docker Pulls](https://img.shields.io/docker/pulls/corund/database_exporter.svg?maxAge=0)](https://hub.docker.com/r/corund/database_exporter/)
+[![Build Status](https://travis-ci.org/corundex/database_exporter.svg?branch=master)](https://travis-ci.org/corundex/database_exporter)
+[![Go Report Card](https://goreportcard.com/badge/github.com/corundex/database_exporter)](https://goreportcard.com/report/github.com/corundex/database_exporter)
+[![GoDoc](https://godoc.org/github.com/corundex/database_exporter?status.svg)](https://godoc.org/github.com/corundex/database_exporter)
+[![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=0)](https://hub.docker.com/r/corundex/database_exporter/)
 
 Database agnostic SQL exporter for [Prometheus](https://prometheus.io).
 
@@ -25,11 +25,11 @@ metrics when queried more frequently than the configured interval.
 
 ## Usage
 
-Get Prometheus Database Exporter [packaged release](https://github.com/Corundex/database_exporter/releases/latest)
+Get Prometheus Database Exporter [packaged release](https://github.com/corundex/database_exporter/releases/latest)
 or build it yourself:
 
 ```bash
-go build github.com/Corundex/database_exporter
+go build github.com/corundex/database_exporter
 ```
 
 then run it from the command line:
@@ -65,9 +65,9 @@ Prometheus to record `up=0` for that scrape. Only metrics defined by collectors 
 Database Exporter process metrics are exported at `/database_exporter_metrics`.
 
 The configuration examples listed here only cover some basic element.
-[`documentation/database_exporter.yml`](https://github.com/Corundex/database_exporter/tree/master/documentation/database_exporter.yml).
+[`documentation/database_exporter.yml`](https://github.com/corundex/database_exporter/tree/master/documentation/database_exporter.yml).
 You will find ready to use "standard" DBMS-specific collector definitions in the
-[`examples`](https://github.com/Corundex/database_exporter/tree/master/examples) directory. You may contribute your own collector
+[`examples`](https://github.com/corundex/database_exporter/tree/master/examples) directory. You may contribute your own collector
 definitions and metric additions if you think they could be more widely useful, even if they are merely different takes
 on already covered DBMSs.
 
