@@ -1,6 +1,5 @@
 # Prometheus Database Exporter
 
-[![Build Status](https://travis-ci.org/corundex/database_exporter.svg?branch=master)](https://travis-ci.org/corundex/database_exporter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/corundex/database_exporter)](https://goreportcard.com/report/github.com/corundex/database_exporter)
 [![GoDoc](https://godoc.org/github.com/corundex/database_exporter?status.svg)](https://godoc.org/github.com/corundex/database_exporter)
 [![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=0)](https://hub.docker.com/repository/docker/corundex/database_exporter/general)
@@ -141,17 +140,17 @@ While this works out of the box with the [MS SQL Server](https://github.com/deni
 a schema and the [Clickhouse](https://github.com/kshvakov/clickhouse) one uses `tcp://`. So Database Exporter does a bit of massaging
 of DSNs for the latter two drivers in order for this to work:
 
-DB | Database Exporter expected DSN | Driver sees
-:---|:---|:---
-MySQL | `mysql://user:passw@protocol(host:port)/dbname` | `user:passw@protocol(host:port)/dbname`
-Oracle | `oracle://user/password@host:port/sid` | `user/password@host:port/sid`
-PostgreSQL | `postgres://user:passw@host:port/dbname` | *unchanged*
-SQL Server | `sqlserver://user:passw@host:port/instance` | *unchanged*
-SQLite3 | `sqlite3://file:mybase.db?cache=shared&mode=rwc` | `file:mybase.db?cache=shared&mode=rwc`
-in-memory SQLite3 | `sqlite3://file::memory:?mode=memory&cache=shared` | `file::memory:?mode=memory&cache=shared`
-Clickhouse | `clickhouse://host:port?username=user&password=passw&database=db` | `tcp://host:port?username=user&password=passw&database=db`
-Couchbase instance | `n1ql://host:port@creds=[{"user":"Administrator","pass":"admin123"}]@timeout=10s` | `host:port`
-Couchbase cluster | `n1ql://http://host:port/@creds=[{"user":"Administrator","pass":"admin123"}]@timeout=10s` | `http://host:port/`
+| DB                 | Database Exporter expected DSN                                                            | Driver sees                                                |
+| :----------------- | :---------------------------------------------------------------------------------------- | :--------------------------------------------------------- |
+| MySQL              | `mysql://user:passw@protocol(host:port)/dbname`                                           | `user:passw@protocol(host:port)/dbname`                    |
+| Oracle             | `oracle://user/password@host:port/sid`                                                    | `user/password@host:port/sid`                              |
+| PostgreSQL         | `postgres://user:passw@host:port/dbname`                                                  | *unchanged*                                                |
+| SQL Server         | `sqlserver://user:passw@host:port/instance`                                               | *unchanged*                                                |
+| SQLite3            | `sqlite3://file:mybase.db?cache=shared&mode=rwc`                                          | `file:mybase.db?cache=shared&mode=rwc`                     |
+| in-memory SQLite3  | `sqlite3://file::memory:?mode=memory&cache=shared`                                        | `file::memory:?mode=memory&cache=shared`                   |
+| Clickhouse         | `clickhouse://host:port?username=user&password=passw&database=db`                         | `tcp://host:port?username=user&password=passw&database=db` |
+| Couchbase instance | `n1ql://host:port@creds=[{"user":"Administrator","pass":"admin123"}]@timeout=10s`         | `host:port`                                                |
+| Couchbase cluster  | `n1ql://http://host:port/@creds=[{"user":"Administrator","pass":"admin123"}]@timeout=10s` | `http://host:port/`                                        |
 
 ## Why It Exists
 
