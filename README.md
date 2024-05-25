@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/corundex/database_exporter.svg?branch=master)](https://travis-ci.org/corundex/database_exporter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/corundex/database_exporter)](https://goreportcard.com/report/github.com/corundex/database_exporter)
 [![GoDoc](https://godoc.org/github.com/corundex/database_exporter?status.svg)](https://godoc.org/github.com/corundex/database_exporter)
-[![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=0)](https://hub.docker.com/r/corundex/database_exporter/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=0)](https://hub.docker.com/corundex/database_exporter/)
 
 Database agnostic SQL exporter for [Prometheus](https://prometheus.io).
 
