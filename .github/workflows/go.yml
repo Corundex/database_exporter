@@ -29,7 +29,23 @@ jobs:
           go-version: "1.18"
 
       - name: Install dependencies
-        run: go mod tidy
+        run: |
+          go get github.com/golang/glog
+          go get github.com/golang/protobuf/proto
+          go get github.com/prometheus/client_golang/prometheus
+          go get github.com/prometheus/client_model/go
+          go get github.com/prometheus/common/model
+          go get gopkg.in/yaml.v2
+          go get github.com/prometheus/client_golang/prometheus/promhttp
+          go get github.com/prometheus/common/expfmt
+          go get github.com/prometheus/common/version
+          go get github.com/denisenkom/go-mssqldb
+          go get github.com/go-sql-driver/mysql
+          go get github.com/kshvakov/clickhouse
+          go get github.com/lib/pq
+          go get github.com/go-goracle/goracle
+          go get github.com/mattn/go-sqlite3
+          go get github.com/couchbase/go_n1ql
 
       - name: Build project
         run: go build -o database_exporter ./...
