@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag name"
+        required: true
+      release_name:
+        description: "Release name"
+        required: true
 
 jobs:
   build:
