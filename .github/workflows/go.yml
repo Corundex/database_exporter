@@ -31,53 +31,31 @@ jobs:
       - name: Build project
         run: go build
 
-      - name: List files
-        run: ls -al
-
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: build
+      - name: Archive binary
+        run: tar -czvf database.exporter.tar.gz config database_exporter database+exporter.yml LICENSE VERSION
 
   release:
     runs-on: ubuntu-latest
     needs: build
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: build
-
-      - name: List files
-        run: ls -al
-
-      - name: Create GitHub Release
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            Release notes for version ${{ github.ref }}
+            Release notes for version ${{ github.ref }}.
           draft: true
           prerelease: true
 
-      - name: Upload Release Asset
+      - name: Create and Upload Custom Tarball
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/myapp # Adjust the path as needed
-          asset_name: myapp # Adjust the name as needed
-          asset_content_type: application/octet-stream
+          asset_path: database_exporter.tar.gz
+          asset_name: database_exporter.tar.gz
+          asset_content_type: application/gzip
