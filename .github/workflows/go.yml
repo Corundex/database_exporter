@@ -51,6 +51,7 @@ jobs:
             Release notes for version ${{ github.ref }}.
           draft: true
           prerelease: true
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
 
       - name: Create and Upload Custom Tarball
         uses: actions/upload-release-asset@v1
