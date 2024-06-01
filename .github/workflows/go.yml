@@ -32,7 +32,7 @@ jobs:
         run: go build
 
       - name: Archive binary
-        run: tar -czvf database.exporter.tar.gz config database_exporter database+exporter.yml LICENSE VERSION
+        run: tar -czvf database_exporter.tar.gz config database_exporter database_exporter.yml LICENSE VERSION
 
   release:
     runs-on: ubuntu-latest
