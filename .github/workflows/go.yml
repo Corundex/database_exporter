@@ -29,10 +29,16 @@ jobs:
           go-version: "1.22.2"
 
       - name: Build project
-        run: go build
+        run: go build -o database_exporter
 
       - name: Archive binary
         run: tar -czvf database_exporter.tar.gz config database_exporter database_exporter.yml LICENSE VERSION
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database_exporter_tarball
+          path: database_exporter.tar.gz
 
   release:
     runs-on: ubuntu-latest
@@ -54,6 +60,12 @@ jobs:
             echo "RELEASE_NAME=Release ${{ github.ref }}" >> $GITHUB_ENV
           fi
 
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database_exporter_tarball
+          path: .
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -69,6 +81,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./database_exporter.tar.gz
+          asset_path: database_exporter.tar.gz
           asset_name: database_exporter.tar.gz
           asset_content_type: application/gzip
