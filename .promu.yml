@@ -1,21 +1,21 @@
 go:
-    cgo: false
+  cgo: false
 repository:
-    path: github.com/Corundex/database_exporter
+  path: github.com/corundex/database_exporter
 build:
-    binaries:
-        - name: database_exporter
-          path: ./
-    flags: -a -tags netgo
-    #ldflags: |
-    #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Version={{.Version}}
-    #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Revision={{.Revision}}
-    #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Branch={{.Branch}}
-    #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.BuildUser={{user}}@{{host}}
-    #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.BuildDate={{date "20060102-15:04:05"}}
+  binaries:
+    - name: database_exporter
+      path: ./
+  flags: -a -tags netgo
+  #ldflags: |
+  #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Version={{.Version}}
+  #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Revision={{.Revision}}
+  #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.Branch={{.Branch}}
+  #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.BuildUser={{user}}@{{host}}
+  #  -X {{repoPath}}/vendor/github.com/prometheus/common/version.BuildDate={{date "20060102-15:04:05"}}
 tarball:
-    files:
-      - LICENSE
-      - README.md
-      - bin/*
-      - config/*
+  files:
+    - LICENSE
+    - README.md
+    - bin/*
+    - config/*

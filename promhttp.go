@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Corundex/database_exporter/exporter"
+	"github.com/corundex/database_exporter/exporter"
 	log "github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/expfmt"
