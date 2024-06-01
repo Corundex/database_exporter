@@ -116,4 +116,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: corundex/database_exporter:test,corundex/database_exporter:${{ github.ref_name }}
+          tags: corundex/database_exporter:latest,corundex/database_exporter:${{ github.ref_name }}

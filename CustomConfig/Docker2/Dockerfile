@@ -1,13 +1,9 @@
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+FROM corundex/database_exporter:latest
 
 WORKDIR     /exporter/
 
 COPY        config/ ./config/
-COPY        database_exporter .
 COPY        database_exporter.yml .
-COPY        LICENSE .
-COPY        VERSION .
 
 EXPOSE      9285
 

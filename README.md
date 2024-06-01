@@ -55,6 +55,41 @@ Usage of ./database_exporter:
   [...]
 ```
 
+## Docker
+
+./CustomConfig folder contains a docker compose configuration for two exporters monitoring two different (almost, the example is two different sqlite instances) databases.
+
+```yaml
+services:
+  database_exporter_db_1:
+    container_name: database_exporter_db_1
+    build:
+      context: Docker1
+    restart: unless-stopped
+    ports:
+      - 9285:9285
+
+  database_exporter_db_2:
+    container_name: database_exporter_db_2
+    build:
+      context: Docker2
+    restart: unless-stopped
+    ports:
+      - 9286:9285
+```
+
+```text
+# HELP dummy_db1_metric_value Sample query
+# TYPE dummy_db1_metric_value gauge
+dummy_db1_metric_value 1
+```
+
+```text
+# HELP dummy_db2_metric_value Sample query
+# TYPE dummy_db2_metric_value gauge
+dummy_db2_metric_value 1
+```
+
 ## Configuration
 
 Database Exporter is deployed alongside the DB server it collects metrics from. If both the exporter and the DB

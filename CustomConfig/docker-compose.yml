@@ -1,0 +1,16 @@
+services:
+  database_exporter_db_1:
+    container_name: database_exporter_db_1
+    build:
+      context: Docker1
+    restart: unless-stopped
+    ports:
+      - 9285:9285
+
+  database_exporter_db_2:
+    container_name: database_exporter_db_2
+    build:
+      context: Docker2
+    restart: unless-stopped
+    ports:
+      - 9286:9285
