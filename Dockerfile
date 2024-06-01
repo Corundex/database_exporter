@@ -1,10 +1,15 @@
-FROM        centos:7
-WORKDIR     /exporter/
-RUN         yum -y update && yum clean all
-RUN         yum -y install libaio
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
 
-ADD         https://github.com/corundex/database_exporter/releases/download/0.6.6/database_exporter.tar.gz /exporter/
-RUN         tar -xzvf database_exporter.tar.gz
+WORKDIR     /exporter/
+# RUN         yum -y update && yum clean all
+# RUN         yum -y install libaio
+
+COPY        config .
+COPY        database_exporter .
+COPY        database_exporter.yml .
+COPY        LICENSE .
+COPY        VERSION .
 
 EXPOSE      9285
 
