@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
-	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -64,7 +63,9 @@ func NewTarget(
 			Value: proto.String(v),
 		})
 	}
-	sort.Sort(prometheus.LabelPairSorter(constLabelPairs))
+
+	//todo - check later
+	//sort.Sort(prometheus.LabelPairSorter(constLabelPairs))
 
 	collectors := make([]Collector, 0, len(ccs))
 	for _, cc := range ccs {
