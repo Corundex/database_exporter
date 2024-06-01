@@ -45,12 +45,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set release name
+        id: set_release_name
+        run: |
+          if [ -n "${{ github.event.inputs.release_name }}" ]; then
+            echo "RELEASE_NAME=${{ github.event.inputs.release_name }}" >> $GITHUB_ENV
+          else
+            echo "RELEASE_NAME=Release ${{ github.ref }}" >> $GITHUB_ENV
+          fi
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.event.inputs.tag_name || github.ref }}
-          release_name: ${{ github.event.inputs.release_name || 'Release ' + github.ref }}
+          release_name: ${{ env.RELEASE_NAME }}
           body: |
             Release notes for version ${{ github.ref }}.
           draft: false
