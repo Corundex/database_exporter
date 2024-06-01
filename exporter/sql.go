@@ -10,8 +10,8 @@ import (
 
 	_ "github.com/couchbase/go_n1ql"     // register the Couchbase driver
 	_ "github.com/denisenkom/go-mssqldb" // register the MS-SQL driver
-	_ "github.com/go-goracle/goracle"    // register the Oracle DB driver
 	_ "github.com/go-sql-driver/mysql"   // register the MySQL driver
+	_ "github.com/godror/godror"         // register the Oracle DB driver
 	_ "github.com/kshvakov/clickhouse"   // register the ClickHouse driver
 	_ "github.com/lib/pq"                // register the PostgreSQL driver
 	_ "github.com/mattn/go-sqlite3"      // register the SQLite3 driver

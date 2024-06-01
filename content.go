@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/corundex/database_exporter/exporter"
+	"database_exporter/exporter"
 )
 
 const (
