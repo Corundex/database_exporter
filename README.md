@@ -3,7 +3,7 @@
 [![Build](https://github.com/corundex/database_exporter/actions/workflows/go.yml/badge.svg)](https://github.com/corundex/database_exporter/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/corundex/database_exporter)](https://goreportcard.com/report/github.com/corundex/database_exporter)
 [![GoDoc](https://godoc.org/github.com/corundex/database_exporter?status.svg)](https://godoc.org/github.com/corundex/database_exporter)
-[![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=0)](https://hub.docker.com/repository/docker/corundex/database_exporter/general)
+[![Docker Pulls](https://img.shields.io/docker/pulls/corundex/database_exporter.svg?maxAge=1)](https://hub.docker.com/repository/docker/corundex/database_exporter/general)
 
 Database agnostic SQL exporter for [Prometheus](https://prometheus.io).
 
