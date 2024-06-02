@@ -171,8 +171,16 @@ To keep things simple and yet allow fully configurable database connections to b
 Go `sql` library does not allow for automatic driver selection based on the DSN (i.e. an explicit driver name must be
 specified) Database Exporter uses the schema part of the DSN (the part before the `://`) to determine which driver to use.
 
-While this works out of the box with the [MS SQL Server](https://github.com/denisenkom/go-mssqldb) and
-[PostgreSQL](https://github.com/lib/pq) drivers, [Oracle OCI8](https://github.com/mattn/go-oci8) and [MySQL driver](https://github.com/go-sql-driver/mysql) DSNs format does not include
+	_ "github.com/couchbase/go_n1ql"     // register the Couchbase driver
+	_ "github.com/denisenkom/go-mssqldb" // register the MS-SQL driver
+	_ "github.com/go-sql-driver/mysql"   // register the MySQL driver
+	_ "github.com/godror/godror"         // register the Oracle DB driver
+	_ "github.com/kshvakov/clickhouse"   // register the ClickHouse driver
+	_ "github.com/lib/pq"                // register the PostgreSQL driver
+	_ "github.com/mattn/go-sqlite3"      // register the SQLite3 driver
+ 
+While this works out of the box with the [MS SQL](https://github.com/denisenkom/go-mssqldb) and
+[PostgreSQL](https://github.com/lib/pq) drivers, [Oracle](https://github.com/godror/godror) and [MySQL](https://github.com/go-sql-driver/mysql) DSNs format does not include
 a schema and the [Clickhouse](https://github.com/kshvakov/clickhouse) one uses `tcp://`. So Database Exporter does a bit of massaging
 of DSNs for the latter two drivers in order for this to work:
 
